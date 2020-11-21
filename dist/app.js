@@ -9,7 +9,7 @@ const auth_1 = __importDefault(require("./routes/auth"));
 const products_1 = __importDefault(require("./routes/products"));
 const app = express_1.default();
 //Create the port
-app.set("port", process.env.APP_PORT || 4000);
+app.set("port", process.env.PORT || 4000);
 //middlewares
 //Is a development aid
 app.use(morgan_1.default("dev"));

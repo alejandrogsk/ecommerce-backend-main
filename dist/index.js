@@ -8,7 +8,6 @@ require("./database");
 function main() {
     app_1.default.listen(app_1.default.get("port"));
     console.log("Server on port:", app_1.default.get("port"));
-    console.log(__dirname);
 }
 main();
 //# sourceMappingURL=index.js.map

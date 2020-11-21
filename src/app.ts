@@ -7,7 +7,7 @@ import produtRoutes from "./routes/products";
 const app = express();
 
 //Create the port
-app.set("port", process.env.APP_PORT || 4000);
+app.set("port", process.env.PORT || 4000);
 
 //middlewares
 //Is a development aid
