@@ -41,7 +41,8 @@ const productSchema = new mongoose_1.Schema({
 productSchema.methods.setImgUrl = function setImgUrl(filename) {
     const host = config_1.default.host;
     const port = config_1.default.port;
-    this.img = `${host}:${port}/public/${filename}`;
+    //this.img = `${host}:${port}/public/${filename}`; desarrollo?
+    this.img = `public/${filename}`;
 };
 exports.default = mongoose_1.model("Product", productSchema);
 //# sourceMappingURL=Products.js.map
