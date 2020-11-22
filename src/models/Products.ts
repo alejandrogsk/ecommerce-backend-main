@@ -48,11 +48,11 @@ const productSchema = new Schema(
 );
 
 productSchema.methods.setImgUrl = function setImgUrl(filename: string) {
-	const host = config.host;
-	const port = config.port;
+	//const host = config.host;
+	//const port = config.port;
 
 	//this.img = `${host}:${port}/public/${filename}`; desarrollo?
-	this.img = `public/${filename}`;
+	this.img = `${process.env.PORT}/public/${filename}`;
 };
 
 export default model<IProduct>("Product", productSchema);
