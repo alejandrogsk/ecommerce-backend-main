@@ -38,8 +38,9 @@ productSchema.methods.setImgUrl = function setImgUrl(filename) {
     //const host = config.host;
     //const port = config.port;
     //this.img = `${host}:${port}/public/${filename}`; desarrollo?
-    //tengo que actualizarlo en heroku
-    this.img = `${process.env.HOST}:${process.env.PORT}/public/${filename}`;
+    //tengo que actualizarlo en herokuu
+    //this.img = `${process.env.HOST}:${process.env.PORT}/public/${filename}`;
+    this.img = `https://ecommerce-restapi.herokuapp.com/public/${filename}`;
 };
 exports.default = mongoose_1.model("Product", productSchema);
 //# sourceMappingURL=Products.js.map

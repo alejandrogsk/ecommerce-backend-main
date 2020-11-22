@@ -53,8 +53,10 @@ productSchema.methods.setImgUrl = function setImgUrl(filename: string) {
 
 	//this.img = `${host}:${port}/public/${filename}`; desarrollo?
 
-	//tengo que actualizarlo en heroku
-	this.img = `${process.env.HOST}:${process.env.PORT}/public/${filename}`;
+	//tengo que actualizarlo en herokuu
+	//this.img = `${process.env.HOST}:${process.env.PORT}/public/${filename}`;
+
+	this.img = `https://ecommerce-restapi.herokuapp.com/public/${filename}`;
 };
 
 export default model<IProduct>("Product", productSchema);
