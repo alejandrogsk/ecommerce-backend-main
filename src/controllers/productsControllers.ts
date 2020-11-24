@@ -63,6 +63,9 @@ export const updateProduct: RequestHandler = async (req, res) => {
 		//Saving image
 		//req.file exists thanks to multer
 		if (req.file) {
+			//delete previus image
+
+			//
 			const { filename } = req.file;
 			product.setImgUrl(filename);
 		}
@@ -103,6 +106,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 		return res.json(productFound);
 	} catch (err) {
 		console.error(err);
+		res.status(404).json({ msg: "Product not found" });
 	}
 };
 

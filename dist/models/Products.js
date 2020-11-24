@@ -38,9 +38,13 @@ productSchema.methods.setImgUrl = function setImgUrl(filename) {
     //const host = config.host;
     //const port = config.port;
     //this.img = `${host}:${port}/public/${filename}`; desarrollo?
-    //tengo que actualizarlo en herokuu
-    //this.img = `${process.env.HOST}:${process.env.PORT}/public/${filename}`;
     this.img = `https://ecommerce-restapi.herokuapp.com/public/${filename}`;
+    /*
+    Para borrar las imagenes del file sistem debería usar algo así
+    let str = "https://ecommerce-restapi.herokuapp.com/public/image-1606088038950.jpg";
+    let res = str.slice(47);
+      
+      */
 };
 exports.default = mongoose_1.model("Product", productSchema);
 //# sourceMappingURL=Products.js.map

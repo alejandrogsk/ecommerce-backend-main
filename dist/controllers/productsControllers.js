@@ -66,6 +66,8 @@ exports.updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function
         //Saving image
         //req.file exists thanks to multer
         if (req.file) {
+            //delete previus image
+            //
             const { filename } = req.file;
             product.setImgUrl(filename);
         }
@@ -103,6 +105,7 @@ exports.getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
     catch (err) {
         console.error(err);
+        res.status(404).json({ msg: "Product not found" });
     }
 });
 /**
