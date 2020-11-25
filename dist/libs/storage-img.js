@@ -7,7 +7,7 @@ const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "./storage/pimg");
+        cb(null, "./storage"); //cb(null, "./storage/pimg");
     },
     filename: function (req, file, cb) {
         cb(null, `${file.fieldname}-${Date.now()}${path_1.default.extname(file.originalname)}`);

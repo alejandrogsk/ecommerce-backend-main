@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
 		file: Express.Multer.File,
 		cb: (error: Error | null, destination: string) => void
 	) {
-		cb(null, "./storage/pimg");
+		cb(null, "./storage"); //cb(null, "./storage/pimg");
 	},
 	filename: function (req, file, cb) {
 		cb(

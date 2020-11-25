@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //for img uploads
-app.use("/public", express.static(path.join(__dirname + "/storage/pimg")));
+app.use("/public", express.static(path.join(__dirname + "storage")));
 
 //Routes
 app.use("/api/auth", authRoutes);
