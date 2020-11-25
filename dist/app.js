@@ -21,6 +21,6 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.use("/api/auth", auth_1.default);
 app.use("/api", products_1.default);
 //for img uploads
-app.use("/public", express_1.default.static(`${__dirname}/storage/pimg`));
+app.use("/public", express_1.default.static(__dirname + "/storage/pimg"));
 exports.default = app;
 //# sourceMappingURL=app.js.map

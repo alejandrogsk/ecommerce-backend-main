@@ -23,6 +23,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api", produtRoutes);
 
 //for img uploads
-app.use("/public", express.static(`${__dirname}/storage/pimg`));
+app.use("/public", express.static(__dirname + "/storage/pimg"));
 
 export default app;
