@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import path from "path";
 
 import authRoutes from "./routes/auth";
 import produtRoutes from "./routes/products";
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //for img uploads
-app.use("/public", express.static(__dirname + "/storage/pimg"));
+app.use("/public", express.static(path.join(__dirname + "/storage/pimg")));
 
 //Routes
 app.use("/api/auth", authRoutes);

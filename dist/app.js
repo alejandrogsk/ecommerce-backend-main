@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
+const path_1 = __importDefault(require("path"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const products_1 = __importDefault(require("./routes/products"));
 const app = express_1.default();
@@ -17,10 +18,10 @@ app.use(morgan_1.default("dev"));
 app.use(express_1.default.json());
 //understand the fields of a form that come per POST
 app.use(express_1.default.urlencoded({ extended: false }));
+//for img uploads
+app.use("/public", express_1.default.static(path_1.default.join(__dirname + "/storage/pimg")));
 //Routes
 app.use("/api/auth", auth_1.default);
 app.use("/api", products_1.default);
-//for img uploads
-app.use("/public", express_1.default.static(__dirname + "/storage/pimg"));
 exports.default = app;
 //# sourceMappingURL=app.js.map
