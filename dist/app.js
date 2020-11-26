@@ -19,7 +19,7 @@ app.use(express_1.default.json());
 //understand the fields of a form that come per POST
 app.use(express_1.default.urlencoded({ extended: false }));
 //for img uploads
-app.use("/public", express_1.default.static(path_1.default.join(__dirname + "storage")));
+app.use("/public", express_1.default.static(path_1.default.join(__dirname + "./storage")));
 //Routes
 app.use("/api/auth", auth_1.default);
 app.use("/api", products_1.default);
