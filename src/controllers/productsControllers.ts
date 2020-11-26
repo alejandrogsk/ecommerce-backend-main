@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import Product, { IProduct } from "../models/Products";
 
+import cloudinary from "../libs/cloudinary";
 /**
  * CREATE PRODUCT
  */
@@ -25,8 +26,11 @@ export const createProduct: RequestHandler = async (req, res) => {
 
 		//req.file exists thanks to multer
 		if (req.file) {
-			const { filename } = req.file;
-			product.setImgUrl(filename);
+			const { secure_url, public_id } = await cloudinary.v2.uploader.upload(
+				req.file.path
+			);
+			product.img = secure_url;
+			product.cloudinary_id = public_id;
 		}
 
 		const savedProduct = await product.save();
@@ -48,7 +52,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
 		let id = req.params.id;
 		let body = req.body;
 
-		const product = await Product.findById(id).exec();
+		const product = await Product.findById(id);
 
 		if (!product) {
 			return res.status(400).json({
@@ -57,27 +61,41 @@ export const updateProduct: RequestHandler = async (req, res) => {
 			});
 		}
 
-		//saving data
-		product.set(body);
+		//product.set(body)
 
-		//Saving image
-		//req.file exists thanks to multer
+		//puede que lo de abajo me convenga ponerlo en un if else
+
 		if (req.file) {
-			//delete previus image
+			await cloudinary.v2.uploader.destroy(product.cloudinary_id);
+			const resp = await cloudinary.v2.uploader.upload(req.file.path);
+			//product.img = secure_url;
+			//product.cloudinary_id = public_id;
+			//hasta acá al menos
 
-			//
-			const { filename } = req.file;
-			product.setImgUrl(filename);
+			const data = {
+				title: req.body.title || product.title,
+				category: req.body.category || product.category,
+				description: req.body.description || product.description,
+				price: req.body.price || product.price,
+				img: resp.secure_url || product.img,
+				cloudinary_id: resp.public_id || product.cloudinary_id,
+			};
+
+			const productUpdated = await Product.findByIdAndUpdate(id, data, {
+				new: true,
+			});
+
+			return res.status(200).json({ ok: true, productUpdated });
 		}
 
-		await product.save();
-
-		return res.json({
-			ok: true,
-			product,
+		const productUpdated = await Product.findByIdAndUpdate(id, body, {
+			new: true,
 		});
+
+		return res.status(200).json({ ok: true, productUpdated });
 	} catch (err) {
 		console.error(err);
+		res.json(err);
 	}
 };
 
@@ -115,10 +133,15 @@ export const getProduct: RequestHandler = async (req, res) => {
  */
 export const deleteProduct: RequestHandler = async (req, res) => {
 	try {
-		const productFound = await Product.findByIdAndDelete(req.params.id);
+		//find user
+		const productFound = await Product.findById(req.params.id);
+		//delete image from cloudinary
+		if (productFound?.img) {
+			await cloudinary.v2.uploader.destroy(productFound.cloudinary_id);
+		}
 
-		if (!productFound)
-			return res.status(204).json({ msg: "Product not found" });
+		//delete user form db
+		await productFound?.remove();
 
 		return res.json(productFound);
 	} catch (err) {

@@ -6,8 +6,8 @@ export interface IProduct extends Document {
 	category: string;
 	description: string;
 	img: string;
+	cloudinary_id: string;
 	price: number;
-	setImgUrl: (password: string) => string;
 }
 /**
  * Las validaciones que estan comentadas(required: true) debería ponerlas en las ruta de POST solamente
@@ -17,28 +17,27 @@ const productSchema = new Schema(
 	{
 		title: {
 			type: String,
-			//required: true,
 			trim: true,
 		},
 		category: {
 			type: String,
-			//required: true,
 			trim: true,
 			lowercase: true,
 		},
 		description: {
 			type: String,
-			//required: true,
 			trim: true,
 		},
 		img: {
 			type: String,
-			//required: false,
+			trim: true,
+		},
+		cloudinary_id: {
+			type: String,
 			trim: true,
 		},
 		price: {
 			type: Number,
-			//required: true,
 		},
 	},
 	{
@@ -46,21 +45,5 @@ const productSchema = new Schema(
 		timestamps: true,
 	}
 );
-
-productSchema.methods.setImgUrl = function setImgUrl(filename: string) {
-	//const host = config.host;
-	//const port = config.port;
-
-	//this.img = `${host}:${port}/public/${filename}`; desarrollo?
-
-	this.img = `https://ecommerce-restapi.herokuapp.com/public/${filename}`;
-
-	/*
-	Para borrar las imagenes del file sistem debería usar algo así
-	let str = "https://ecommerce-restapi.herokuapp.com/public/image-1606088038950.jpg"; 
-	let res = str.slice(47);
-	  
-	  */
-};
 
 export default model<IProduct>("Product", productSchema);

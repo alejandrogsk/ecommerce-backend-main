@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCategory = exports.deleteProduct = exports.getProduct = exports.getProducts = exports.updateProduct = exports.createProduct = void 0;
 const Products_1 = __importDefault(require("../models/Products"));
+const cloudinary_1 = __importDefault(require("../libs/cloudinary"));
 /**
  * CREATE PRODUCT
  */
@@ -34,8 +35,9 @@ exports.createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function
         });
         //req.file exists thanks to multer
         if (req.file) {
-            const { filename } = req.file;
-            product.setImgUrl(filename);
+            const { secure_url, public_id } = yield cloudinary_1.default.v2.uploader.upload(req.file.path);
+            product.img = secure_url;
+            product.cloudinary_id = public_id;
         }
         const savedProduct = yield product.save();
         return res.json({
@@ -54,31 +56,42 @@ exports.updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         let id = req.params.id;
         let body = req.body;
-        const product = yield Products_1.default.findById(id).exec();
+        const product = yield Products_1.default.findById(id);
         if (!product) {
             return res.status(400).json({
                 ok: false,
                 msg: "The ID doesn't exist",
             });
         }
-        //saving data
-        product.set(body);
-        //Saving image
-        //req.file exists thanks to multer
+        //product.set(body)
+        //puede que lo de abajo me convenga ponerlo en un if else
         if (req.file) {
-            //delete previus image
-            //
-            const { filename } = req.file;
-            product.setImgUrl(filename);
+            yield cloudinary_1.default.v2.uploader.destroy(product.cloudinary_id);
+            const resp = yield cloudinary_1.default.v2.uploader.upload(req.file.path);
+            //product.img = secure_url;
+            //product.cloudinary_id = public_id;
+            //hasta acá al menos
+            const data = {
+                title: req.body.title || product.title,
+                category: req.body.category || product.category,
+                description: req.body.description || product.description,
+                price: req.body.price || product.price,
+                img: resp.secure_url || product.img,
+                cloudinary_id: resp.public_id || product.cloudinary_id,
+            };
+            const productUpdated = yield Products_1.default.findByIdAndUpdate(id, data, {
+                new: true,
+            });
+            return res.status(200).json({ ok: true, productUpdated });
         }
-        yield product.save();
-        return res.json({
-            ok: true,
-            product,
+        const productUpdated = yield Products_1.default.findByIdAndUpdate(id, body, {
+            new: true,
         });
+        return res.status(200).json({ ok: true, productUpdated });
     }
     catch (err) {
         console.error(err);
+        res.json(err);
     }
 });
 /**
@@ -113,9 +126,14 @@ exports.getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* (
  */
 exports.deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const productFound = yield Products_1.default.findByIdAndDelete(req.params.id);
-        if (!productFound)
-            return res.status(204).json({ msg: "Product not found" });
+        //find user
+        const productFound = yield Products_1.default.findById(req.params.id);
+        //delete image from cloudinary
+        if (productFound === null || productFound === void 0 ? void 0 : productFound.img) {
+            yield cloudinary_1.default.v2.uploader.destroy(productFound.cloudinary_id);
+        }
+        //delete user form db
+        yield (productFound === null || productFound === void 0 ? void 0 : productFound.remove());
         return res.json(productFound);
     }
     catch (err) {
