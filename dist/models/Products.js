@@ -1,10 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-/**
- * Las validaciones que estan comentadas(required: true) debería ponerlas en las ruta de POST solamente
- * de lo contrario me afecta el PUT, podria usar express validator o crar un middleware
- */
 const productSchema = new mongoose_1.Schema({
     title: {
         type: String,

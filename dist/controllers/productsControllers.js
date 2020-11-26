@@ -63,14 +63,9 @@ exports.updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function
                 msg: "The ID doesn't exist",
             });
         }
-        //product.set(body)
-        //puede que lo de abajo me convenga ponerlo en un if else
         if (req.file) {
             yield cloudinary_1.default.v2.uploader.destroy(product.cloudinary_id);
             const resp = yield cloudinary_1.default.v2.uploader.upload(req.file.path);
-            //product.img = secure_url;
-            //product.cloudinary_id = public_id;
-            //hasta acá al menos
             const data = {
                 title: req.body.title || product.title,
                 category: req.body.category || product.category,
