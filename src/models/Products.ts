@@ -1,5 +1,4 @@
 import { Schema, model, Document } from "mongoose";
-import config from "../config";
 
 export interface IProduct extends Document {
 	title: string; //lowercase because is typescript not mongoose
@@ -9,10 +8,6 @@ export interface IProduct extends Document {
 	cloudinary_id: string;
 	price: number;
 }
-/**
- * Las validaciones que estan comentadas(required: true) debería ponerlas en las ruta de POST solamente
- * de lo contrario me afecta el PUT, podria usar express validator o crar un middleware
- */
 const productSchema = new Schema(
 	{
 		title: {

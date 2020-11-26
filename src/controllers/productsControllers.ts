@@ -61,16 +61,9 @@ export const updateProduct: RequestHandler = async (req, res) => {
 			});
 		}
 
-		//product.set(body)
-
-		//puede que lo de abajo me convenga ponerlo en un if else
-
 		if (req.file) {
 			await cloudinary.v2.uploader.destroy(product.cloudinary_id);
 			const resp = await cloudinary.v2.uploader.upload(req.file.path);
-			//product.img = secure_url;
-			//product.cloudinary_id = public_id;
-			//hasta acá al menos
 
 			const data = {
 				title: req.body.title || product.title,
