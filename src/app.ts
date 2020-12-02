@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import path from "path";
+import cors from "cors";
 
 import authRoutes from "./routes/auth";
 import produtRoutes from "./routes/products";
@@ -9,6 +10,9 @@ const app = express();
 
 //Create the port
 app.set("port", process.env.PORT || 4000);
+
+//prevent cors error
+app.use(cors())
 
 //middlewares
 //Is a development aid
