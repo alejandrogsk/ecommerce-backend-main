@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import path from "path";
-import cors from "cors";
+const cors = require('cors')
 
 import authRoutes from "./routes/auth";
 import produtRoutes from "./routes/products";
