@@ -95,7 +95,7 @@ exports.updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const products = yield Products_1.default.find();
-        return res.json(products);
+        return res.status(200).json(products);
     }
     catch (err) {
         console.error(err);
@@ -109,7 +109,7 @@ exports.getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const productFound = yield Products_1.default.findById(req.params.id);
         if (!productFound)
             return res.status(204).json({ msg: "Product not found" });
-        return res.json(productFound);
+        return res.status(200).json(productFound);
     }
     catch (err) {
         console.error(err);
@@ -139,13 +139,19 @@ exports.deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function
  * GET BY CATEGORY
  */
 exports.getCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let categoryByRequest = req.params;
-    Products_1.default.find(categoryByRequest, (err, productCategory) => {
-        if (err)
-            return res.status(404).json(err);
-        if (productCategory.length < 1)
-            return res.status(404).json({ msg: "no hay productos" });
-        return res.status(200).json({ ok: true, res: productCategory });
-    });
+    try {
+        let categoryByRequest = req.params;
+        Products_1.default.find(categoryByRequest, (err, productCategory) => {
+            if (err)
+                return res.status(404).json(err);
+            if (productCategory.length < 1)
+                return res.status(404).json({ msg: "no hay productos" });
+            return res.status(200).json(productCategory);
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(404).json(err);
+    }
 });
 //# sourceMappingURL=productsControllers.js.map

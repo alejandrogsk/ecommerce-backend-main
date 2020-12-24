@@ -98,7 +98,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
 export const getProducts: RequestHandler = async (req, res) => {
 	try {
 		const products = await Product.find();
-		return res.json(products);
+		return res.status(200).json(products);
 	} catch (err) {
 		console.error(err);
 	}
@@ -114,7 +114,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 		if (!productFound)
 			return res.status(204).json({ msg: "Product not found" });
 
-		return res.json(productFound);
+		return res.status(200).json(productFound);
 	} catch (err) {
 		console.error(err);
 		res.status(404).json({ msg: "Product not found" });
@@ -147,13 +147,18 @@ export const deleteProduct: RequestHandler = async (req, res) => {
  */
 
 export const getCategory: RequestHandler = async (req, res) => {
-	let categoryByRequest = req.params;
+	try {
+		let categoryByRequest = req.params;
 
-	Product.find(categoryByRequest, (err, productCategory) => {
-		if (err) return res.status(404).json(err);
-		if (productCategory.length < 1)
-			return res.status(404).json({ msg: "no hay productos" });
+		Product.find(categoryByRequest, (err, productCategory) => {
+			if (err) return res.status(404).json(err);
+			if (productCategory.length < 1)
+				return res.status(404).json({ msg: "no hay productos" });
 
-		return res.status(200).json({ ok: true, res: productCategory });
-	});
+			return res.status(200).json(productCategory);
+		});
+	} catch (err) {
+		console.log(err);
+		res.status(404).json(err);
+	}
 };

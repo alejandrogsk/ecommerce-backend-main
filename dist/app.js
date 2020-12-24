@@ -6,14 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const path_1 = __importDefault(require("path"));
-const cors_1 = __importDefault(require("cors"));
+const cors = require('cors');
 const auth_1 = __importDefault(require("./routes/auth"));
 const products_1 = __importDefault(require("./routes/products"));
 const app = express_1.default();
 //Create the port
 app.set("port", process.env.PORT || 4000);
 //prevent cors error
-app.use(cors_1.default());
+app.use(cors());
 //middlewares
 //Is a development aid
 app.use(morgan_1.default("dev"));
