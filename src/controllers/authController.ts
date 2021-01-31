@@ -64,9 +64,14 @@ export const signin = async (req: Request, res: Response) => {
 };
 
 export const profile = async (req: Request, res: Response) => {
+	const token = req.header("x-token");
 	//where does userID come from? verifyToken
 	const user = await User.findById(req.userId);
 	if (!user) return res.status(400).json({ msg: "User does not exist" });
 
-	return res.json(user);
+	return res.json({
+		ok: true,	
+		user,
+		token
+	});
 };

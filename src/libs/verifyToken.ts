@@ -26,6 +26,7 @@ export const TokenValidator = (
 		 * file and also add it to the end of the tsconfig.json file
 		 */
 		req.userId = payload.id;
+		
 
 		next();
 	} catch (err) {

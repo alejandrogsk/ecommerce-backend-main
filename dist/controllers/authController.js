@@ -57,10 +57,15 @@ exports.signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.profile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.header("x-token");
     //where does userID come from? verifyToken
     const user = yield User_1.default.findById(req.userId);
     if (!user)
         return res.status(400).json({ msg: "User does not exist" });
-    return res.json(user);
+    return res.json({
+        ok: true,
+        user,
+        token
+    });
 });
 //# sourceMappingURL=authController.js.map
