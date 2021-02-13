@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCategory = exports.deleteProduct = exports.getProduct = exports.getProducts = exports.updateProduct = exports.createProduct = void 0;
+exports.getProductBySearch = exports.getCategory = exports.deleteProduct = exports.getProduct = exports.getProducts = exports.updateProduct = exports.createProduct = void 0;
 const Products_1 = __importDefault(require("../models/Products"));
 const cloudinary_1 = __importDefault(require("../libs/cloudinary"));
 /**
@@ -152,6 +152,26 @@ exports.getCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     catch (err) {
         console.log(err);
         res.status(404).json(err);
+    }
+});
+//10/02/2021
+exports.getProductBySearch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.query.product);
+        if (req.query.product) {
+            //Debo modificar los res.status().json()
+            //Y documentar mejor
+            const valueToFind = req.query.product;
+            //in the title property of my Product Schema find by the RegExp. $options: "i" = case unsensitive
+            const products = yield Products_1.default.find({ title: { $regex: new RegExp(valueToFind), $options: "i" } });
+            if (products.length < 1)
+                return res.json({ mesage: "Lamentablemente no se pudieron encontrar productos" });
+            return res.json(products);
+        }
+        return res.json({ msg: "Que estas buscando?" });
+    }
+    catch (error) {
+        return res.json({ msg: "Hubo algún error", error });
     }
 });
 //# sourceMappingURL=productsControllers.js.map

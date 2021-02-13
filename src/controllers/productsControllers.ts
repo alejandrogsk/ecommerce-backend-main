@@ -6,7 +6,7 @@ import cloudinary from "../libs/cloudinary";
  * CREATE PRODUCT
  */
 export const createProduct: RequestHandler = async (req, res) => {
-	try {
+	
 		const { title, category, description, price } = req.body;
 
 		const productFound = await Product.findOne({ title });
@@ -35,20 +35,17 @@ export const createProduct: RequestHandler = async (req, res) => {
 
 		const savedProduct = await product.save();
 
-		return res.json({
-			menssage: "Photo saved",
+		return res.status(200).json({
+			ok: true,
 			savedProduct,
 		});
-	} catch (err) {
-		console.error(err);
-	}
 };
 
 // =============================
 // EDIT PRODUCT
 // =============================
 export const updateProduct: RequestHandler = async (req, res) => {
-	try {
+	
 		let id = req.params.id;
 		let body = req.body;
 
@@ -86,60 +83,51 @@ export const updateProduct: RequestHandler = async (req, res) => {
 		});
 
 		return res.status(200).json({ ok: true, productUpdated });
-	} catch (err) {
-		console.error(err);
-		res.json(err);
-	}
+
 };
 
 /**
  * GET ALL PRODUCTS
  */
 export const getProducts: RequestHandler = async (req, res) => {
-	try {
-		const products = await Product.find();
-		return res.status(200).json(products);
-	} catch (err) {
-		console.error(err);
-	}
+
+	const products = await Product.find();
+	return res.status(200).json(products);
+
 };
 
 /**
  * GET A SINGLE PRODUCT
  */
 export const getProduct: RequestHandler = async (req, res) => {
-	try {
-		const productFound = await Product.findById(req.params.id);
 
-		if (!productFound)
-			return res.status(204).json({ msg: "Product not found" });
+	const productFound = await Product.findById(req.params.id);
 
-		return res.status(200).json(productFound);
-	} catch (err) {
-		console.error(err);
-		res.status(404).json({ msg: "Product not found" });
-	}
+	if (!productFound)
+		return res.status(204).json({ msg: "Product not found" });
+
+	return res.status(200).json(productFound);
+
 };
 
 /**
  * DELETE PRODUCT
  */
 export const deleteProduct: RequestHandler = async (req, res) => {
-	try {
-		//find user
-		const productFound = await Product.findById(req.params.id);
-		//delete image from cloudinary
-		if (productFound?.img) {
-			await cloudinary.v2.uploader.destroy(productFound.cloudinary_id);
-		}
 
-		//delete user form db
-		await productFound?.remove();
+	//find user
+	const productFound = await Product.findById(req.params.id);
 
-		return res.json(productFound);
-	} catch (err) {
-		console.error(err);
+	//delete image from cloudinary
+	if (productFound?.img) {
+		await cloudinary.v2.uploader.destroy(productFound.cloudinary_id);
 	}
+
+	//delete user form db
+	await productFound?.remove();
+
+	return res.status(204).json({ok: true, productFound});
+
 };
 
 /**
@@ -147,18 +135,35 @@ export const deleteProduct: RequestHandler = async (req, res) => {
  */
 
 export const getCategory: RequestHandler = async (req, res) => {
-	try {
-		let categoryByRequest = req.params;
 
-		Product.find(categoryByRequest, (err, productCategory) => {
-			if (err) return res.status(404).json(err);
-			if (productCategory.length < 1)
-				return res.status(404).json({ msg: "no hay productos" });
+	let categoryByRequest = req.params;
 
-			return res.status(200).json(productCategory);
-		});
-	} catch (err) {
-		console.log(err);
-		res.status(404).json(err);
-	}
+	Product.find(categoryByRequest, (err, productCategory) => {
+		if (err) return res.status(404).json({ok:false, err});
+
+		if (productCategory.length < 1) return res.status(404).json({ msg: "Unfortunately no products could be found" });
+
+		return res.status(200).json({ok: true, productCategory});
+	});
 };
+
+
+/**
+ * GET BY QUERY 
+ */
+export const getProductBySearch: RequestHandler = async (req, res) => {
+	if (req.query.product) {
+
+		const valueToFind = req.query.product;
+		//If the title (from my Product Schema) coincides with the value ($regex), return it. $options: "i" = case unsensitive
+		const products = await Product.find({ title: { $regex: new RegExp(valueToFind as string), $options: "i" }});
+
+		if (products.length < 1) return res.json({mesage: "Unfortunately no products could be found"});	
+
+		return res.status(200).json({
+			ok: true, 
+			products
+		});		
+	}
+	return res.status(200).json({ok: true, msg: "What are you looking for?"});
+}

@@ -16,5 +16,7 @@ router.get("/product/:id", productsControllers_1.getProduct);
 router.delete("/product/:id", productsControllers_1.deleteProduct);
 //Categories
 router.get("/products/:category", productsControllers_1.getCategory);
+//Searching
+router.get("/search", productsControllers_1.getProductBySearch);
 exports.default = router;
 //# sourceMappingURL=products.js.map

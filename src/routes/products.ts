@@ -7,6 +7,7 @@ import {
 	deleteProduct,
 	updateProduct,
 	getCategory,
+	getProductBySearch
 } from "../controllers/productsControllers";
 
 import { TokenValidator } from "../libs/verifyToken";
@@ -35,5 +36,8 @@ router.delete("/product/:id", deleteProduct);
 
 //Categories
 router.get("/products/:category", getCategory);
+
+//Searching
+router.get("/search", getProductBySearch)
 
 export default router;

@@ -17,7 +17,7 @@ export const verifyRole = async (
 			return res.status(401).json({
 				ok: false,
 				err: {
-					message: "El usuario no es administraor",
+					message: "The user should be an administrator",
 				},
 			});
 		}
