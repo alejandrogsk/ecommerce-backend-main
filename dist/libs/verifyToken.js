@@ -9,7 +9,7 @@ exports.TokenValidator = (req, res, next) => {
     try {
         const token = req.header("x-token");
         if (!token)
-            return res.status(401).json("Access denied");
+            return res.status(401).json({ ok: false, message: "Access denied, you should authenticate" });
         const payload = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY || "tokenTest");
         /**
          * for userId to work it was necessary to configure the types.d.ts
