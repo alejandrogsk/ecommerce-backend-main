@@ -31,6 +31,6 @@ export const TokenValidator = (
 		next();
 	} catch (err) {
 		console.log(err);
-		res.status(401).json({ ok: false, msg: "token is required" });
+		res.json({ ok: false, msg: "token is required" });
 	}
 };
