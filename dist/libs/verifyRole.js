@@ -26,7 +26,7 @@ exports.verifyRole = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             return res.status(401).json({
                 ok: false,
                 err: {
-                    message: "El usuario no es administraor",
+                    message: "The user should be an administrator",
                 },
             });
         }

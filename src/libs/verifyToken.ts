@@ -14,7 +14,7 @@ export const TokenValidator = (
 ) => {
 	try {
 		const token = req.header("x-token");
-		if (!token) return res.status(401).json("Access denied");
+		if (!token) return res.status(401).json({ok:false, message:"Access denied, you should authenticate"});
 
 		const payload = jwt.verify(
 			token,
