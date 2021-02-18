@@ -19,8 +19,7 @@ exports.TokenValidator = (req, res, next) => {
         next();
     }
     catch (err) {
-        console.log(err);
-        res.json({ ok: false, msg: "token is required" });
+        res.json({ ok: false, message: "token is required" });
     }
 };
 //# sourceMappingURL=verifyToken.js.map

@@ -130,12 +130,12 @@ exports.getProductBySearch = (req, res) => __awaiter(void 0, void 0, void 0, fun
         //If the title (from my Product Schema) coincides with the value ($regex), return it. $options: "i" = case unsensitive
         const products = yield Products_1.default.find({ title: { $regex: new RegExp(valueToFind), $options: "i" } });
         if (products.length < 1)
-            return res.json({ mesage: "Unfortunately no products could be found" });
+            return res.json({ message: "Unfortunately no products could be found" });
         return res.status(200).json({
             ok: true,
             products
         });
     }
-    return res.status(200).json({ ok: true, msg: "What are you looking for?" });
+    return res.status(200).json({ ok: true, message: "What are you looking for?" });
 });
 //# sourceMappingURL=productsControllers.js.map

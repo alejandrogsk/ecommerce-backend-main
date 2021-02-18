@@ -158,12 +158,12 @@ export const getProductBySearch: RequestHandler = async (req, res) => {
 		//If the title (from my Product Schema) coincides with the value ($regex), return it. $options: "i" = case unsensitive
 		const products = await Product.find({ title: { $regex: new RegExp(valueToFind as string), $options: "i" }});
 
-		if (products.length < 1) return res.json({mesage: "Unfortunately no products could be found"});	
+		if (products.length < 1) return res.json({message: "Unfortunately no products could be found"});	
 
 		return res.status(200).json({
 			ok: true, 
 			products
 		});		
 	}
-	return res.status(200).json({ok: true, msg: "What are you looking for?"});
+	return res.status(200).json({ok: true, message: "What are you looking for?"});
 }
