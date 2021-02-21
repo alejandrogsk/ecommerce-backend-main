@@ -3,10 +3,15 @@ import morgan from "morgan";
 import path from "path";
 const cors = require('cors')
 
+
 import authRoutes from "./routes/auth";
 import produtRoutes from "./routes/products";
+import paymentRoutes from "./routes/payment";
 
 const app = express();
+
+
+
 
 //Create the port
 app.set("port", process.env.PORT || 4000);
@@ -29,5 +34,6 @@ app.use("/public", express.static(path.join(__dirname + "./storage")));
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api", produtRoutes);
+app.use("/api", paymentRoutes)
 
 export default app;

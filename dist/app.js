@@ -9,6 +9,7 @@ const path_1 = __importDefault(require("path"));
 const cors = require('cors');
 const auth_1 = __importDefault(require("./routes/auth"));
 const products_1 = __importDefault(require("./routes/products"));
+const payment_1 = __importDefault(require("./routes/payment"));
 const app = express_1.default();
 //Create the port
 app.set("port", process.env.PORT || 4000);
@@ -26,5 +27,6 @@ app.use("/public", express_1.default.static(path_1.default.join(__dirname + "./s
 //Routes
 app.use("/api/auth", auth_1.default);
 app.use("/api", products_1.default);
+app.use("/api", payment_1.default);
 exports.default = app;
 //# sourceMappingURL=app.js.map
