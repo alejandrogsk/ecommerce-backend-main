@@ -25,7 +25,7 @@ exports.checkout = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             payment_method: id,
             confirm: true
         });
-        console.log(payment);
+        //console.log(payment)
         res.json({ ok: true, message: "The payment was made successfully" });
     }
     catch (error) {

@@ -21,7 +21,7 @@ exports.signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //saving a new user
     const findUser = yield User_1.default.findOne({ email });
     if (findUser) {
-        return res.status(400).json({ ok: false, msg: "User already exist" });
+        return res.status(400).json({ ok: false, message: "User already exist" });
     }
     const user = new User_1.default(req.body);
     //encrypt password before saving it on database
@@ -38,7 +38,7 @@ exports.signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield User_1.default.findOne({ email: req.body.email });
     if (!user)
-        return res.status(400).json({ msg: "User does not exist" });
+        return res.status(400).json({ message: "User doesn't exist" });
     const isMatch = yield user.validatePassword(req.body.password);
     //user not found
     if (!isMatch) {
@@ -51,8 +51,7 @@ exports.signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = jsonwebtoken_1.default.sign({ id: user.id }, config_1.default.jwtSecret || "tokenTest", { expiresIn: 86400 });
     return res.status(200).header("x-token", token).json({
         ok: true,
-        email: user.email,
-        password: user.password,
+        user,
         token,
     });
 });
@@ -61,7 +60,7 @@ exports.profile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //where does userID come from? verifyToken
     const user = yield User_1.default.findById(req.userId);
     if (!user)
-        return res.status(400).json({ msg: "User does not exist" });
+        return res.status(400).json({ message: "User doesn't exist" });
     return res.json({
         ok: true,
         user,

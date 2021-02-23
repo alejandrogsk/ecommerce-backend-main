@@ -11,7 +11,7 @@ export const signup = async (req: Request, res: Response) => {
 	const findUser = await User.findOne({ email });
 
 	if (findUser) {
-		return res.status(400).json({ ok: false, msg: "User already exist" });
+		return res.status(400).json({ ok: false, message: "User already exist" });
 	}
 
 	const user: IUser = new User(req.body);
@@ -20,7 +20,6 @@ export const signup = async (req: Request, res: Response) => {
 	user.password = await user.encryptPassword(user.password);
 
 	const savedUser = await user.save();
-
 	//token
 	const token: string = jwt.sign(
 		{ id: savedUser.id },
@@ -36,7 +35,8 @@ export const signup = async (req: Request, res: Response) => {
 
 export const signin = async (req: Request, res: Response) => {
 	const user = await User.findOne({ email: req.body.email });
-	if (!user) return res.status(400).json({ msg: "User does not exist" });
+	
+	if (!user) return res.status(400).json({ message: "User doesn't exist" });
 
 	const isMatch = await user.validatePassword(req.body.password);
 
@@ -57,8 +57,7 @@ export const signin = async (req: Request, res: Response) => {
 
 	return res.status(200).header("x-token", token).json({
 		ok: true,
-		email: user.email,
-		password: user.password,
+		user,
 		token,
 	});
 };
@@ -67,7 +66,7 @@ export const profile = async (req: Request, res: Response) => {
 	const token = req.header("x-token");
 	//where does userID come from? verifyToken
 	const user = await User.findById(req.userId);
-	if (!user) return res.status(400).json({ msg: "User does not exist" });
+	if (!user) return res.status(400).json({ message: "User doesn't exist" });
 
 	return res.json({
 		ok: true,	
