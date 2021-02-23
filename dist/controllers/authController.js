@@ -17,9 +17,16 @@ const User_1 = __importDefault(require("../models/User"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../config"));
 exports.signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.body.email)
+        return res.status(400).json({ ok: false, message: "Email is required" });
+    if (!req.body.password)
+        return res.status(400).json({ ok: false, message: "Password is required" });
+    if (!req.body.name)
+        return res.status(400).json({ ok: false, message: "Name is required" });
     const { email } = req.body;
-    //saving a new user
+    //find user
     const findUser = yield User_1.default.findOne({ email });
+    //if user exist send an error
     if (findUser) {
         return res.status(400).json({ ok: false, message: "User already exist" });
     }
@@ -36,14 +43,22 @@ exports.signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.body.email)
+        return res.status(400).json({ ok: false, message: "Email is required" });
+    if (!req.body.password)
+        return res.status(400).json({ ok: false, message: "Password is required" });
     const user = yield User_1.default.findOne({ email: req.body.email });
     if (!user)
-        return res.status(400).json({ message: "User doesn't exist" });
+        return res.status(400).json({
+            ok: false,
+            message: "User doesn't exist"
+        });
     const isMatch = yield user.validatePassword(req.body.password);
     //user not found
     if (!isMatch) {
         return res.status(400).json({
-            msg: "Email or password are incorrect",
+            ok: false,
+            message: "Incorrect password",
         });
     }
     //Generate Token
@@ -60,7 +75,10 @@ exports.profile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //where does userID come from? verifyToken
     const user = yield User_1.default.findById(req.userId);
     if (!user)
-        return res.status(400).json({ message: "User doesn't exist" });
+        return res.status(400).json({
+            ok: false,
+            message: "User doesn't exist"
+        });
     return res.json({
         ok: true,
         user,
