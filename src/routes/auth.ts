@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { signup, signin, profile } from "../controllers/authController";
+import { register, login, profile } from "../controllers/authController";
 
 
 import { TokenValidator } from "../libs/verifyToken";
 
 const router: Router = Router();
 
-router.post("/signup", signup);
+router.post("/register", register);
 
-router.post("/signin", signin);
+router.post("/login", login);
 
 router.get("/profile", TokenValidator, profile);
 

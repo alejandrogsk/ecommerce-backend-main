@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import config from "../config";
 
-export const signup = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response) => {
 	if(!req.body.email) return res.status(400).json({ ok: false, message: "Email is required" });
 	if(!req.body.password) return res.status(400).json({ ok: false, message: "Password is required" });
 	if(!req.body.name) return res.status(400).json({ ok: false, message: "Name is required" });
@@ -38,7 +38,7 @@ export const signup = async (req: Request, res: Response) => {
 	});
 };
 
-export const signin = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
 	if(!req.body.email) return res.status(400).json({ ok: false, message: "Email is required" });
 	if(!req.body.password) return res.status(400).json({ ok: false, message: "Password is required" });
 	
